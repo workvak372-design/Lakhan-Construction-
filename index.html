@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lakhan Construction — Building Solid, Building Right</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="logo.jpeg">
+<style>
+  :root{
+    --blueprint: #10365C;
+    --blueprint-deep: #0A2540;
+    --line: #C7D9E8;
+    --paper: #F3EFE4;
+    --paper-dim: #E8E2D2;
+    --safety: #F2B705;
+    --rust: #C1502E;
+    --ink: #1C2B36;
+    --concrete: #6E7476;
+    --white: #FFFFFF;
+
+    --display: 'Oswald', sans-serif;
+    --stencil: 'Archivo Black', sans-serif;
+    --body: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family: var(--body);
+    color: var(--ink);
+    background: var(--paper);
+    overflow-x: hidden;
+  }
+  a{ text-decoration:none; color:inherit; }
+  ul{ list-style:none; }
+  img{ max-width:100%; display:block; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* ---------- utility ---------- */
+  .wrap{ max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rust);
+  }
+  .eyebrow.on-dark{ color: var(--safety); }
+
+  /* dimension-line divider, signature motif */
+  .dim-divider{
+    display:flex; align-items:center; gap:14px;
+    color: var(--concrete);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    margin: 0 0 48px 0;
+  }
+  .dim-divider::before, .dim-divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background: repeating-linear-gradient(90deg, var(--concrete) 0 6px, transparent 6px 10px);
+  }
+  .dim-divider .tick{ position:relative; }
+  .dim-divider .tick::before, .dim-divider .tick::after{
+    content:""; position:absolute; top:-4px; width:1px; height:9px; background:var(--concrete);
+  }
+  .dim-divider .tick::before{ left:-14px; }
+  .dim-divider .tick::after{ right:-14px; }
+
+  /* ---------- nav ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background: rgba(10,37,64,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(199,217,232,0.15);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    max-width:1180px; margin:0 auto; padding: 18px 32px;
+  }
+  .logo{
+    font-family: var(--stencil);
+    font-size: 18px;
+    color: var(--white);
+    letter-spacing: 0.01em;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .logo-mark{
+    width: 42px;
+    height: 42px;
+    border-radius: 3px;
+    object-fit: cover;
+    border: 1px solid rgba(199,217,232,0.35);
+    flex-shrink:0;
+  }
+  .logo-text{ display:flex; flex-direction:column; }
+  .logo span{ color: var(--safety); }
+  .logo small{
+    display:block;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--line);
+    letter-spacing: 0.2em;
+    margin-top:4px;
+    font-weight:400;
+  }
+  .nav-links{ display:flex; gap:36px; align-items:center; }
+  .nav-links a{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--line);
+    transition: color 0.2s;
+  }
+  .nav-links a:hover{ color: var(--safety); }
+  .nav-cta{
+    background: var(--safety);
+    color: var(--blueprint-deep) !important;
+    padding: 9px 18px;
+    font-weight:600;
+  }
+  .nav-toggle{ display:none; background:none; border:none; color:var(--white); font-size:22px; cursor:pointer; }
+
+  @media (max-width: 860px){
+    .nav-links{
+      position:fixed; top:64px; left:0; right:0;
+      background: var(--blueprint-deep);
+      flex-direction:column; align-items:flex-start;
+      padding: 24px 32px; gap:22px;
+      transform: translateY(-150%);
+      transition: transform 0.3s ease;
+      border-bottom: 1px solid rgba(199,217,232,0.15);
+    }
+    .nav-links.open{ transform: translateY(0); }
+    .nav-toggle{ display:block; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    min-height: 100vh;
+    background: var(--blueprint);
+    background-image:
+      linear-gradient(rgba(199,217,232,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(199,217,232,0.07) 1px, transparent 1px);
+    background-size: 36px 36px;
+    display:flex; align-items:center;
+    padding: 140px 0 80px;
+    overflow:hidden;
+  }
+  .hero .wrap{ display:grid; grid-template-columns: 1.1fr 1fr; gap:40px; align-items:center; width:100%; }
+  .hero-copy h1{
+    font-family: var(--display);
+    font-weight:700;
+    font-size: clamp(38px, 5.6vw, 64px);
+    line-height: 1.04;
+    color: var(--white);
+    margin: 18px 0 22px;
+    text-transform: uppercase;
+  }
+  .hero-copy h1 em{
+    font-style:normal;
+    color: var(--safety);
+  }
+  .hero-copy p.lede{
+    font-size: 17px;
+    line-height:1.7;
+    color: var(--line);
+    max-width: 480px;
+    margin-bottom: 34px;
+  }
+  .btn-row{ display:flex; gap:16px; flex-wrap:wrap; }
+  .btn{
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 15px 26px;
+    display:inline-block;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+  }
+  .btn-primary{ background: var(--safety); color: var(--blueprint-deep); font-weight:600; }
+  .btn-primary:hover{ background: var(--white); }
+  .btn-ghost{ border-color: rgba(199,217,232,0.4); color: var(--white); }
+  .btn-ghost:hover{ border-color: var(--safety); color: var(--safety); }
+
+  /* blueprint drawing */
+  .blueprint-art{ position:relative; }
+  .blueprint-art svg{ width:100%; height:auto; }
+  .draw-line{
+    fill:none;
+    stroke: var(--line);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    animation: draw 2.6s ease forwards;
+  }
+  .draw-line.accent{ stroke: var(--safety); animation-delay: 0.4s; }
+  .draw-line.rust{ stroke: var(--rust); animation-delay: 0.7s; }
+  .dim-label{
+    font-family: var(--mono);
+    font-size: 9px;
+    fill: var(--line);
+    opacity: 0;
+    animation: fadeIn 0.6s ease forwards 2.4s;
+  }
+  @keyframes draw{ to{ stroke-dashoffset: 0; } }
+  @keyframes fadeIn{ to{ opacity: 0.85; } }
+
+  @media (max-width: 900px){
+    .hero .wrap{ grid-template-columns: 1fr; }
+    .hero{ padding-top: 120px; }
+  }
+
+  /* ---------- mission ---------- */
+  .mission{ padding: 110px 0; background: var(--paper); }
+  .mission .wrap{ display:grid; grid-template-columns: 0.9fr 1.4fr; gap:60px; }
+  .mission-label h2{
+    font-family: var(--display);
+    text-transform:uppercase;
+    font-size: 30px;
+    color: var(--blueprint);
+    line-height:1.1;
+    margin-top: 10px;
+  }
+  .mission-statement p{
+    font-family: var(--display);
+    font-weight:400;
+    font-size: clamp(22px, 2.6vw, 30px);
+    line-height:1.5;
+    color: var(--ink);
+  }
+  .mission-statement .fine{
+    font-family: var(--body);
+    font-size:15px;
+    color: var(--concrete);
+    margin-top: 26px;
+    max-width: 620px;
+    line-height:1.7;
+  }
+  @media (max-width: 800px){ .mission .wrap{ grid-template-columns:1fr; gap:24px; } }
+
+  /* ---------- scope / services ---------- */
+  .scope{ padding: 40px 0 110px; background: var(--paper); }
+  .scope-head{ margin-bottom: 50px; }
+  .scope-head h2{
+    font-family: var(--display);
+    text-transform:uppercase;
+    font-size: clamp(28px,4vw,40px);
+    color: var(--blueprint);
+    margin-top:10px;
+  }
+  .sheet-grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--concrete);
+    border: 1px solid var(--concrete);
+  }
+  .sheet{
+    background: var(--paper);
+    padding: 34px 32px;
+    position:relative;
+    transition: background 0.25s ease;
+  }
+  .sheet:hover{ background: var(--paper-dim); }
+  .sheet .sheet-no{
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--rust);
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+    display:block;
+  }
+  .sheet h3{
+    font-family: var(--display);
+    font-size: 21px;
+    text-transform: uppercase;
+    color: var(--blueprint);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+  }
+  .sheet p{ font-size: 14.5px; line-height:1.7; color: var(--concrete); }
+  @media (max-width: 700px){ .sheet-grid{ grid-template-columns: 1fr; } }
+  .mission-grid-3{ grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 900px){ .mission-grid-3{ grid-template-columns: 1fr; } }
+
+  /* ---------- stats ---------- */
+  .stats{ background: var(--blueprint-deep); padding: 70px 0; }
+  .stats .wrap{ display:grid; grid-template-columns: repeat(4,1fr); gap: 30px; text-align:center; }
+  .stat .num{
+    font-family: var(--stencil);
+    font-size: clamp(32px,4vw,46px);
+    color: var(--safety);
+  }
+  .stat .label{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--line);
+    margin-top: 8px;
+  }
+  @media (max-width: 700px){ .stats .wrap{ grid-template-columns: repeat(2,1fr); gap:36px; } }
+
+  /* ---------- projects ---------- */
+  .projects{ padding: 110px 0; background: var(--paper); }
+  .proj-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 50px;
+  }
+  .proj-card{
+    background: var(--blueprint);
+    aspect-ratio: 4/3;
+    position:relative;
+    overflow:hidden;
+    border: 1px solid var(--blueprint-deep);
+  }
+  .proj-card svg{ position:absolute; inset:0; width:100%; height:100%; opacity:0.9; }
+  .proj-tag{
+    position:absolute; left:0; bottom:0; right:0;
+    padding: 16px 18px;
+    background: linear-gradient(0deg, rgba(10,37,64,0.95), transparent);
+  }
+  .proj-tag .p-type{ font-family: var(--mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color: var(--safety); }
+  .proj-tag h4{ font-family: var(--display); color: var(--white); text-transform:uppercase; font-size:16px; margin-top:4px; }
+  @media (max-width: 860px){ .proj-grid{ grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px){ .proj-grid{ grid-template-columns: 1fr; } }
+
+  /* ---------- contact ---------- */
+  .contact{ background: var(--blueprint); padding: 110px 0; position:relative;
+    background-image:
+      linear-gradient(rgba(199,217,232,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(199,217,232,0.06) 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+  .contact .wrap{ display:grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+  .contact-copy h2{
+    font-family: var(--display);
+    text-transform:uppercase;
+    font-size: clamp(28px,4vw,40px);
+    color: var(--white);
+    margin-top:10px;
+    line-height:1.15;
+  }
+  .contact-copy p{ color: var(--line); margin-top:18px; line-height:1.7; max-width:420px; }
+  .contact-details{ margin-top: 34px; display:flex; flex-direction:column; gap:14px; }
+  .contact-details div{ font-family: var(--mono); font-size:13px; color:var(--line); }
+  .contact-details span{ color: var(--safety); }
+
+  form{ display:flex; flex-direction:column; gap:16px; }
+  .form-row{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  label{
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--line);
+    margin-bottom: 6px;
+    display:block;
+  }
+  input, select, textarea{
+    width:100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(199,217,232,0.3);
+    color: var(--white);
+    padding: 12px 14px;
+    font-family: var(--body);
+    font-size: 14px;
+  }
+  input:focus, select:focus, textarea:focus{
+    outline: 2px solid var(--safety);
+    outline-offset: 1px;
+    border-color: var(--safety);
+  }
+  textarea{ resize: vertical; min-height: 90px; }
+  select{ color: var(--white); }
+  select option{ color: var(--ink); }
+  .submit-btn{
+    background: var(--safety);
+    color: var(--blueprint-deep);
+    font-family: var(--mono);
+    font-weight:600;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 15px;
+    border: none;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background 0.2s ease;
+  }
+  .submit-btn:hover{ background: var(--white); }
+  .submit-btn:focus-visible{ outline: 2px solid var(--white); outline-offset: 2px; }
+  @media (max-width: 900px){ .contact .wrap{ grid-template-columns:1fr; } .form-row{ grid-template-columns:1fr; } }
+
+  /* ---------- footer ---------- */
+  footer{
+    background: var(--blueprint-deep);
+    padding: 40px 0;
+    border-top: 1px solid rgba(199,217,232,0.15);
+  }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  footer .f-logo{ font-family: var(--stencil); font-size:15px; color: var(--white); display:flex; align-items:center; gap:10px; }
+  footer .f-logo span{ color: var(--safety); }
+  footer p{ font-family: var(--mono); font-size: 11px; color: var(--concrete); }
+
+  /* reveal on scroll */
+  .reveal{ opacity:0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in{ opacity:1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">
+      <img src="logo.jpeg" alt="Lakhan Construction logo" class="logo-mark">
+      <span class="logo-text">LAKHAN<span>.</span>CONSTRUCTION<small>GENERAL CONTRACTING &amp; BUILD-OUT</small></span>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#scope">Services</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#mission">About</a></li>
+      <li><a href="#contact" class="nav-cta">Request a Quote</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <div class="eyebrow on-dark">DWG NO. LC-001 — SITE OVERVIEW</div>
+      <h1>Engineering trust,<br>since <em>12 years</em></h1>
+      <p class="lede">Lakhan Construction delivers residential, commercial, and infrastructure projects across Greater Noida — built with strong foundations, honest pricing, and on-time delivery.</p>
+      <div class="btn-row">
+        <a href="#contact" class="btn btn-primary">Request a Quote</a>
+        <a href="#projects" class="btn btn-ghost">View Our Work</a>
+        <a href="Lakhan_Construction_Catalogue.pdf" class="btn btn-ghost" download>Download Catalogue</a>
+      </div>
+    </div>
+    <div class="blueprint-art">
+      <svg viewBox="0 0 480 400" xmlns="http://www.w3.org/2000/svg">
+        <!-- building structure line drawing -->
+        <path class="draw-line" d="M60 340 L60 140 L180 90 L300 140 L300 340" />
+        <path class="draw-line" d="M60 200 L300 200 M60 260 L300 260 M60 140 L300 140" />
+        <path class="draw-line accent" d="M100 340 L100 220 L140 220 L140 340" />
+        <path class="draw-line accent" d="M220 340 L220 220 L260 220 L260 340" />
+        <path class="draw-line rust" d="M330 340 L330 60 M330 60 L410 60 M370 60 L370 340" />
+        <path class="draw-line rust" d="M330 100 L370 100 M330 150 L370 150 M330 200 L370 200 M330 250 L370 250 M330 300 L370 300" />
+        <path class="draw-line" d="M20 340 L440 340" />
+        <text x="150" y="365" class="dim-label">18'-0" CLR</text>
+        <text x="345" y="45" class="dim-label">TOWER B</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="mission" id="mission">
+  <div class="wrap">
+    <div class="mission-label">
+      <div class="eyebrow">ABOUT US</div>
+      <h2>Built on trust, measured in precision.</h2>
+    </div>
+    <div class="mission-statement">
+      <p>Lakhan Construction is a trusted name in the construction industry with over 12 years of experience delivering quality residential and commercial projects.</p>
+      <p class="fine">We specialize in building strong, durable, and modern structures that stand the test of time — from planning to final handover, with a focus on quality materials, skilled workmanship, and transparent communication. Whether it's a dream home, a commercial space, a renovation, or structural work, we ensure every project is completed with dedication and on-time delivery.</p>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:60px;">
+    <div class="sheet-grid mission-grid-3">
+      <div class="sheet reveal">
+        <span class="sheet-no">MISSION / 01</span>
+        <h3>Cost-Effective Solutions</h3>
+        <p>High-quality construction services at competitive, transparent pricing — maximum value without compromising on quality.</p>
+      </div>
+      <div class="sheet reveal">
+        <span class="sheet-no">MISSION / 02</span>
+        <h3>Client Satisfaction</h3>
+        <p>Clear communication, timely delivery, and attention to detail so every client is fully satisfied with the result.</p>
+      </div>
+      <div class="sheet reveal">
+        <span class="sheet-no">MISSION / 03</span>
+        <h3>Safety Standards</h3>
+        <p>Strict safety guidelines on every site — a secure working environment for our crew and a secure structure for our clients.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scope" id="scope">
+  <div class="wrap">
+    <div class="scope-head reveal">
+      <div class="eyebrow">SCOPE OF WORK</div>
+      <h2>What we build</h2>
+    </div>
+    <div class="sheet-grid">
+      <div class="sheet reveal">
+        <span class="sheet-no">A-101 / RESIDENTIAL</span>
+        <h3>Residential Construction</h3>
+        <p>Strong, modern homes — single-floor houses, duplexes, villas, and custom-designed residences — built for durability, comfort, and quality finishing.</p>
+      </div>
+      <div class="sheet reveal">
+        <span class="sheet-no">A-102 / COMMERCIAL</span>
+        <h3>Commercial Buildings</h3>
+        <p>Shops, office spaces, showrooms, and commercial complexes designed for functionality, strength, and long-term performance.</p>
+      </div>
+      <div class="sheet reveal">
+        <span class="sheet-no">A-103 / RENOVATION</span>
+        <h3>Renovation Projects</h3>
+        <p>Structural repairs, interior upgrades, tile work, painting, plumbing, and electrical improvements for a fresh, modern look.</p>
+      </div>
+      <div class="sheet reveal">
+        <span class="sheet-no">A-104 / INFRASTRUCTURE</span>
+        <h3>Infrastructure Development</h3>
+        <p>Boundary walls, roads, drainage systems, and other civil works, carried out to high safety and quality standards.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="stat reveal"><div class="num">12+</div><div class="label">Years of Experience</div></div>
+    <div class="stat reveal"><div class="num">4</div><div class="label">Core Service Lines</div></div>
+    <div class="stat reveal"><div class="num">On-Time</div><div class="label">Committed Delivery</div></div>
+    <div class="stat reveal"><div class="num">Fair</div><div class="label">Transparent Pricing</div></div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="wrap">
+    <div class="scope-head reveal">
+      <div class="eyebrow">SELECTED WORK</div>
+      <h2>Recent Projects</h2>
+    </div>
+    <div class="proj-grid">
+      <div class="proj-card reveal">
+        <svg viewBox="0 0 300 225" preserveAspectRatio="xMidYMid slice">
+          <rect width="300" height="225" fill="#0A2540"/>
+          <path d="M40 190 L40 90 L110 60 L180 90 L180 190" stroke="#C7D9E8" stroke-width="1.4" fill="none"/>
+          <path d="M40 130 L180 130 M40 160 L180 160" stroke="#C7D9E8" stroke-width="1" fill="none"/>
+          <path d="M210 190 L210 40 L260 40 L260 190" stroke="#F2B705" stroke-width="1.4" fill="none"/>
+        </svg>
+        <div class="proj-tag"><div class="p-type">Residential</div><h4>Residential Housing Estates</h4></div>
+      </div>
+      <div class="proj-card reveal">
+        <svg viewBox="0 0 300 225" preserveAspectRatio="xMidYMid slice">
+          <rect width="300" height="225" fill="#0A2540"/>
+          <path d="M30 200 L30 50 L270 50 L270 200" stroke="#C7D9E8" stroke-width="1.4" fill="none"/>
+          <path d="M30 90 L270 90 M30 130 L270 130 M30 170 L270 170" stroke="#C7D9E8" stroke-width="1" fill="none"/>
+          <path d="M150 50 L150 200" stroke="#C1502E" stroke-width="1.4" fill="none"/>
+        </svg>
+        <div class="proj-tag"><div class="p-type">Commercial</div><h4>Shopping Complexes</h4></div>
+      </div>
+      <div class="proj-card reveal">
+        <svg viewBox="0 0 300 225" preserveAspectRatio="xMidYMid slice">
+          <rect width="300" height="225" fill="#0A2540"/>
+          <path d="M60 200 L60 70 L150 40 L240 70 L240 200" stroke="#C7D9E8" stroke-width="1.4" fill="none"/>
+          <path d="M100 200 L100 150 L200 150 L200 200" stroke="#F2B705" stroke-width="1.4" fill="none"/>
+        </svg>
+        <div class="proj-tag"><div class="p-type">Infrastructure</div><h4>Civil &amp; Infrastructure Works</h4></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="contact-copy reveal">
+      <div class="eyebrow on-dark">GET IN TOUCH</div>
+      <h2>Send us your query</h2>
+      <p>Have a project in mind or just a question? Fill out the form and we'll follow up within one business day.</p>
+      <div class="contact-details">
+        <div>PHONE &nbsp; <span>+91 79087 66962</span> &nbsp;/&nbsp; <span>+91 99719 38553</span></div>
+        <div>EMAIL &nbsp; <span>Constructionlakhan790@gmail.com</span></div>
+        <div>OFFICE &nbsp; <span>Near Shiv Mandir, Behind Indian Bank, Main Road, Kasna, Greater Noida, G.B. Nagar (UP)</span></div>
+      </div>
+    </div>
+    <form class="reveal" id="queryForm" onsubmit="return handleSubmit(event)">
+      <div class="form-row">
+        <div>
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" required>
+        </div>
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div>
+        <label for="type">Project Type</label>
+        <select id="type" name="project_type">
+          <option>New Construction</option>
+          <option>Commercial Build-Out</option>
+          <option>Renovation / Remodel</option>
+          <option>Infrastructure Work</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label for="details">Your Query</label>
+        <textarea id="details" name="message" placeholder="Tell us about your project, location, timeline, or any question you have..." required></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Send Query</button>
+      <p id="formStatus" style="font-family: var(--mono); font-size:11px; color: var(--line); margin-top:4px;"></p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-logo"><img src="logo.jpeg" alt="Lakhan Construction logo" class="logo-mark" style="width:30px;height:30px;">LAKHAN<span>.</span>CONSTRUCTION</div>
+    <p>&copy; 2026 Lakhan Construction. "Together, we build not just structures, but stronger communities and a sustainable future."</p>
+  </div>
+</footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  async function handleSubmit(e){
+    e.preventDefault();
+    const form = e.target;
+    const btn = form.querySelector('.submit-btn');
+    const status = document.getElementById('formStatus');
+    const originalLabel = 'Send Query';
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    const payload = {
+      name: document.getElementById('name').value,
+      phone: document.getElementById('phone').value,
+      email: document.getElementById('email').value,
+      project_type: document.getElementById('type').value,
+      message: document.getElementById('details').value,
+      _subject: 'New website query — Lakhan Construction'
+    };
+
+    try{
+      const res = await fetch('https://formsubmit.co/ajax/constructionlakhan790@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if(res.ok){
+        btn.textContent = 'Query Sent ✓';
+        status.textContent = "Thanks — we'll be in touch soon.";
+        form.reset();
+      } else {
+        throw new Error('Request failed');
+      }
+    } catch(err){
+      btn.textContent = originalLabel;
+      status.textContent = "Something went wrong. Please call or email us directly.";
+    }
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    }, 3200);
+    return false;
+  }
+</script>
+
+</body>
+</html>
